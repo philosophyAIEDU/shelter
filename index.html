@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>무더위쉼터 찾기 | 더위를 피해 안전한 쉼터를 찾아드립니다</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Maps API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZlYrSVwQpXXaQIwwYD_NWOSY6wRZ0NbU&libraries=places&callback=initMap">
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <h1>무더위쉼터 찾기</h1>
+                </div>
+                <p class="subtitle">더위를 피할 수 있는 안전한 쉼터를 찾아드립니다</p>
+            </div>
+        </header>
+
+        <section class="search-section">
+            <div class="search-container">
+                <div class="input-group">
+                    <input type="text" id="locationInput" placeholder="예: 서울 종로구, 경기도 수원시">
+                    <button id="searchBtn">
+                        <i class="fas fa-search"></i>
+                        <span>검색</span>
+                    </button>
+                </div>
+                <div id="status" class="status-message"></div>
+            </div>
+        </section>
+
+        <div class="content-wrapper">
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="map-overlay" id="mapOverlay">
+                    <div class="loading-spinner"></div>
+                    <p>지도를 로드하는 중입니다...</p>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-header">
+                    <h2><i class="fas fa-list"></i> 근처 쉼터 목록</h2>
+                    <div class="results-count" id="resultsCount"></div>
+                </div>
+                <div class="shelters-list" id="sheltersContainer">
+                    <div class="placeholder-message">
+                        <i class="fas fa-info-circle"></i>
+                        <p>지역을 검색하면 근처 쉼터 정보가 표시됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p>&copy; 2025 무더위쉼터 찾기. 행정안전부 데이터 기반.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
