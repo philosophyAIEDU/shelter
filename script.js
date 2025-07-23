@@ -33,7 +33,12 @@ async function loadSheltersData() {
                 });
 
                 // 위도, 경도가 있는 데이터만 필터링
-                if (obj['LA'] && obj['LO'] && !isNaN(obj['LA']) && !isNaN(obj['LO'])) {
+                if (
+                    obj['LA'] &&
+                    obj['LO'] &&
+                    !isNaN(obj['LA']) &&
+                    !isNaN(obj['LO'])
+                ) {
                     sheltersData.push({
                         name: obj['RSTR_NM'] || '이름 없음',
                         address: obj['DTL_ADRES'] || '',
@@ -42,20 +47,20 @@ async function loadSheltersData() {
                         lng: parseFloat(obj['LO']),
                         facilities: {
                             fans: parseInt(obj['COLR_HOLD_ELEFN']) || 0,
-                            acs: parseInt(obj['COLR_HOLD_ARCNDTN']) || 0
+                            acs: parseInt(obj['COLR_HOLD_ARCNDTN']) || 0,
                         },
                         hours: {
                             weekday: {
                                 start: obj['WKDAY_OPER_BEGIN_TIME'] || '0900',
-                                end: obj['WKDAY_OPER_END_TIME'] || '1800'
+                                end: obj['WKDAY_OPER_END_TIME'] || '1800',
                             },
                             weekend: {
                                 start: obj['WKEND_HDAY_OPER_BEGIN_TIME'] || '',
-                                end: obj['WKEND_HDAY_OPER_END_TIME'] || ''
-                            }
+                                end: obj['WKEND_HDAY_OPER_END_TIME'] || '',
+                            },
                         },
                         type: obj['FCLTY_SCLAS'] || '기타',
-                        area: obj['AR'] ? `${obj['AR']}㎡` : '정보 없음'
+                        area: obj['AR'] ? `${obj['AR']}㎡` : '정보 없음',
                     });
                 }
             }
@@ -75,7 +80,7 @@ function initMap() {
         zoom: 7,
         styles: [
             // 지도 스타일
-        ]
+        ],
     };
 
     try {
@@ -103,7 +108,7 @@ function getAddressCoords(address) {
                 resolve({
                     lat: location.lat(),
                     lng: location.lng(),
-                    address: results[0].formatted_address
+                    address: results[0].formatted_address,
                 });
             } else {
                 reject('주소를 찾을 수 없습니다. 정확한 주소를 입력해주세요.');
@@ -114,7 +119,7 @@ function getAddressCoords(address) {
 
 // 거리 계산 함수
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
+    const R = 6371; // 지구 반지름 (km)
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a =
@@ -122,7 +127,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    return R * c; // 거리 (km)
 }
 
 // 마커 표시 함수
@@ -147,16 +152,16 @@ function displayMarkers(userLat, userLng, nearbyShelters) {
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             scale: 12,
-            fillColor: "#4361ee",
+            fillColor: '#4361ee',
             fillOpacity: 1,
-            strokeColor: "#ffffff",
+            strokeColor: '#ffffff',
             strokeWeight: 3,
         },
-        zIndex: 1000
+        zIndex: 1000,
     });
 
     const userInfoWindow = new google.maps.InfoWindow({
-        content: `<div style="padding:10px;font-weight:bold;color:#4361ee;">검색 위치</div>`
+        content: `<div style="padding:10px;font-weight:bold;color:#4361ee;">검색 위치</div>`,
     });
 
     userMarker.addListener('click', () => {
@@ -175,17 +180,17 @@ function displayMarkers(userLat, userLng, nearbyShelters) {
             title: shelter.name,
             label: {
                 text: (index + 1).toString(),
-                color: "#ffffff",
-                fontSize: "12px"
+                color: '#ffffff',
+                fontSize: '12px',
             },
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 10,
-                fillColor: "#f87171",
+                fillColor: '#f87171',
                 fillOpacity: 1,
-                strokeColor: "#ffffff",
+                strokeColor: '#ffffff',
                 strokeWeight: 2,
-            }
+            },
         });
 
         const infoContent = `
@@ -203,7 +208,7 @@ function displayMarkers(userLat, userLng, nearbyShelters) {
         `;
 
         const infoWindow = new google.maps.InfoWindow({
-            content: infoContent
+            content: infoContent,
         });
 
         marker.addListener('click', () => {
@@ -217,7 +222,12 @@ function displayMarkers(userLat, userLng, nearbyShelters) {
     // 지도 중심 이동 및 줌 조정
     map.setCenter(userPosition);
     if (nearbyShelters.length > 0) {
-        const distanceToFirst = calculateDistance(userLat, userLng, nearbyShelters[0].lat, nearbyShelters[0].lng);
+        const distanceToFirst = calculateDistance(
+            userLat,
+            userLng,
+            nearbyShelters[0].lat,
+            nearbyShelters[0].lng
+        );
         let zoomLevel = 14;
         if (distanceToFirst > 20) zoomLevel = 11;
         else if (distanceToFirst > 10) zoomLevel = 12;
@@ -243,45 +253,47 @@ function displaySheltersList(nearbyShelters) {
     }
 
     countDiv.textContent = `${nearbyShelters.length}개`;
-    container.innerHTML = nearbyShelters.map((shelter, index) => `
-        <div class="shelter-item">
-            <h3>
-                <span style="margin-right: 8px; color: #f87171;">${index + 1}.</span>
-                ${shelter.name}
-            </h3>
-            
-            <div class="shelter-meta">
-                <div class="meta-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>${(shelter.distance || 0).toFixed(2)}km</span>
+    container.innerHTML = nearbyShelters
+        .map((shelter, index) => `
+            <div class="shelter-item">
+                <h3>
+                    <span style="margin-right: 8px; color: #f87171;">${index + 1}.</span>
+                    ${shelter.name}
+                </h3>
+
+                <div class="shelter-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${(shelter.distance || 0).toFixed(2)}km</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${shelter.hours.weekday.start}-${shelter.hours.weekday.end}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span>${shelter.area}</span>
+                    </div>
                 </div>
-                <div class="meta-item">
-                    <i class="fas fa-clock"></i>
-                    <span>${shelter.hours.weekday.start}-${shelter.hours.weekday.end}</span>
+
+                <div class="shelter-details">
+                    <div class="shelter-address">
+                        <i class="fas fa-location-dot"></i>
+                        <span>${shelter.roadAddress || shelter.address || '주소 정보 없음'}</span>
+                    </div>
                 </div>
-                <div class="meta-item">
-                    <i class="fas fa-ruler-combined"></i>
-                    <span>${shelter.area}</span>
+
+                <div class="shelter-facilities">
+                    <span class="facility-tag">
+                        <i class="fas fa-fan"></i> 선풍기 ${shelter.facilities.fans}대
+                    </span>
+                    <span class="facility-tag">
+                        <i class="fas fa-wind"></i> 에어컨 ${shelter.facilities.acs}대
+                    </span>
                 </div>
             </div>
-            
-            <div class="shelter-details">
-                <div class="shelter-address">
-                    <i class="fas fa-location-dot"></i>
-                    <span>${shelter.roadAddress || shelter.address || '주소 정보 없음'}</span>
-                </div>
-            </div>
-            
-            <div class="shelter-facilities">
-                <span class="facility-tag">
-                    <i class="fas fa-fan"></i> 선풍기 ${shelter.facilities.fans}대
-                </span>
-                <span class="facility-tag">
-                    <i class="fas fa-wind"></i> 에어컨 ${shelter.facilities.acs}대
-                </span>
-            </div>
-        </div>
-    `).join('');
+        `)
+        .join('');
 }
 
 // 근처 쉼터 찾기
@@ -323,7 +335,6 @@ document.getElementById('searchBtn').addEventListener('click', async function ()
 
         // 4. 리스트에 표시
         displaySheltersList(nearbyShelters);
-
     } catch (error) {
         console.error('Error:', error);
         updateStatus(error, 'error');
