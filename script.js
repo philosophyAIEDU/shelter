@@ -74,46 +74,7 @@ function initMap() {
         center: { lat: 37.5665, lng: 126.9780 }, // 서울 중심
         zoom: 7,
         styles: [
-            {
-                featureType: "administrative",
-                elementType: "labels.text.fill",
-                stylers: [{ color: "#444" }]
-            },
-            {
-                featureType: "landscape",
-                elementType: "all",
-                stylers: [{ color: "#f2f2f2" }]
-            },
-            {
-                featureType: "poi",
-                elementType: "all",
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "road",
-                elementType: "all",
-                stylers: [{ saturation: -100 }, { lightness: 45 }]
-            },
-            {
-                featureType: "road.highway",
-                elementType: "all",
-                stylers: [{ visibility: "simplified" }]
-            },
-            {
-                featureType: "road.arterial",
-                elementType: "labels.icon",
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "transit",
-                elementType: "all",
-                stylers: [{ visibility: "off" }]
-            },
-            {
-                featureType: "water",
-                elementType: "all",
-                stylers: [{ color: "#4a90e2" }, { visibility: "on" }]
-            }
+            // 지도 스타일
         ]
     };
 
